@@ -17,12 +17,21 @@
 				<div class="sensor_3">3</div>
 			</div>
 			
-			<div class="wall"></div>
+			<div id="wall" class="wall"></div>
 		</div>
 		
 		<div class="grass"></div>
 	</div>
 
-	<script src="ai.js"></script>
+	<div class="debugArea">
+    
+	    <textarea id="debugTextarea" class="debugTextareaClass">N/A</textarea>  
+	    <input type="text" id="PassosFeitos" value="0" style="width:50px">
+	    <input type="button" id="iniciar" value="Iniciar" onClick="runSim('1')" />
+	    <input type="button" id="parar" value="Parar" onClick="runSim('0')" />
+	    
+	</div>
+
+	<script src="js/ai.js"></script>
 </body>
 </html>

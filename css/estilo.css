@@ -1,3 +1,8 @@
+html{
+	width: 100%;
+	height: 100%;
+}
+
 body{
 	background-color: #fff;
 	margin: 0px;
@@ -11,21 +16,21 @@ body{
 	float: left;
 	background-color: #000;
 	width: 100%;
-	height: 500px;
+	height: 100%;
 }
 
 .grass{
 	float: left;
 	background-color: #2ecc71;
 	width: 100%;
-	height: 35%;
+	height: 30%;
 }
 
 .road{
 	float: left;
 	background-color: #bdc3c7;
 	width: 100%;
-	height: 65%;
+	height: 40%;
 }
 
 .ai{
@@ -68,4 +73,38 @@ body{
 .sensor_3{
 	top:-50px;
 	left:50px;
+}
+
+
+.debugArea{
+    width: calc(100% - 20px);
+    padding: 10px;
+    float: left;
+    height: 10%;
+}
+
+.debugArea input{
+	border: 1px solid #E1E1E1;
+	padding: 10px;
+	margin-left: 10px;
+}
+
+.debugTextareaClass{
+    width: 400px;
+    height: 100%;
+    resize: none;
+    border: 1px solid #E1E1E1;
+    float: left;
+}
+
+#iniciar{
+	color: #FFF;
+	background: #2ecc71;
+	border: 0;
+}
+
+#parar{
+	color: #FFF;
+	background: #e74c3c;
+	border: 0;
 }
