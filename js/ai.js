@@ -1,11 +1,15 @@
 var c = 0;
 var aiPos = 0;
 
+var walls = 0;
+var avoided = 0;
+var crash = 0;
+
 function tick(){
     c++;
     document.getElementById('stepsDone').value = c;
-    moveWall();
-    checkCollision(); 
+    moveWall(); 
+    checkCollision();
 }
 
 var tickInterval;
@@ -15,7 +19,7 @@ function runSim(state){
         if(c > 100){
             runSim('0'); 
         }else{
-            tickInterval = setInterval("tick();", 100);                       
+            tickInterval = setInterval("tick();", 20);
         } 
         
     }else{
@@ -24,9 +28,11 @@ function runSim(state){
         document.getElementById('stepsDone').value = c;
         document.getElementById('wall').style.left = null;
         document.getElementById('wall').style.right = '0px';
-        //added this
-        document.getElementById('ai').style.marginTop = "0px";
+        document.getElementById('ai').style.marginTop = "50px";
         aiPos = 0;
+        walls = 0;
+        crash = 0;
+        avoided = 0;
         
     }
 }
@@ -35,33 +41,39 @@ function moveWall(){
     var getWallX = document.getElementById('wall').offsetLeft;
     var getWallY = document.getElementById('wall').offsetTop;
     
-    document.getElementById('debugTextarea').innerHTML += "["+c+"] Wall Pos X: "+getWallX+" | Y:"+getWallY+"\n";
-    document.getElementById('debugTextarea').scrollTop = document.getElementById('debugTextarea').scrollHeight;
+    var getAIX = document.getElementById('sensor_2').offsetLeft+500;
+    var getAIY = document.getElementById('ai').offsetTop;
     
+    var successRate = Math.floor((avoided/(avoided+crash)*100));   
+    
+    document.getElementById('topDebug').innerHTML = "&nbsp;["+c+"]<br>&nbsp;Parede ("+getWallX+","+getWallY+")<br>&nbsp;AI ("+getAIX+","+getAIY+")<br>&nbsp;Paredes: "+walls+" Evitado: "+avoided+" Batida: "+crash+" Taxa de Sucesso: "+successRate+"%";
+        
     if(getWallX <= 0){
+        var randomWallYPos = Math.floor(Math.random() * (200 + 1) + 0);
+        document.getElementById('wall').style.marginTop = randomWallYPos+"px";  
+        
         document.getElementById('wall').style.left = null;
         document.getElementById('wall').style.right = '0px';
+        
+        walls++;
+        
     }else{
-        getWallX = getWallX-40;
+        getWallX = getWallX-20;
         document.getElementById('wall').style.left = getWallX+'px';
-    }
+     }
     
 }
 
 
 function moveCar(direction){
-    if(aiPos < 0){
-        aiPos = 0;
-    }
-    if(aiPos > 250){
-        aiPos = 250;
-    }
+    if(aiPos < 50){aiPos = 50;}
+    if(aiPos > 200){aiPos = 200;}
     
     if(direction == 'down'){
-        aiPos = aiPos + 10;   
-    }else{
-        aiPos = aiPos - 10;
-    }
+        aiPos=aiPos+10;   
+    }else{ 
+        aiPos=aiPos-10;   
+    }    
     
     
     document.getElementById('ai').style.marginTop = aiPos+"px";
@@ -74,11 +86,15 @@ function checkCollision(){
     
     var getWallY = document.getElementById('wall').offsetTop+100;
     var getAIY = document.getElementById('ai').offsetTop;
-    
-    document.getElementById('debugTextarea').innerHTML += "["+c+"] Sensor2 X: "+getAIX+"| Y:"+getAIY+"\n";
-    
-    if(getWallX < getAIX && getAIY < getWallY){
-        moveCar('down');
+        
+    if(getWallX < getAIX && getAIY >= getWallY-100 && getAIY < getWallY || getWallX < getAIX && getWallY-100 > getAIY && getWallY-100 < getAIY+50){
+        moveCar('down');             
+        document.getElementById('sensor_2').style.backgroundColor = 'red';
+        if(getWallX < 100){crash++;}
+        
+    }else{
+        document.getElementById('sensor_2').style.backgroundColor = 'white';
+        if(getWallX < 100){avoided++;}
     }
     
 }
