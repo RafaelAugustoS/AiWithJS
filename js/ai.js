@@ -1,37 +1,41 @@
 var c = 0;
+var aiPos = 0;
 
 function tick(){
     c++;
-    document.getElementById('PassosFeitos').value = c;
-    // Movo o WALL para a esquerda
-    moveWall(); 
+    document.getElementById('stepsDone').value = c;
+    moveWall();
+    checkCollision(); 
 }
 
 var tickInterval;
 
 function runSim(state){
     if(state == 1){
-        // Inicio o simulador
         if(c > 100){
-            runSim('0'); // Parar
+            runSim('0'); 
         }else{
-            tickInterval = setInterval("tick();", 100);
-        }
+            tickInterval = setInterval("tick();", 100);                       
+        } 
+        
     }else{
-        // Paro a simulação
         clearInterval(tickInterval);
         c = 0;
-        document.getElementById('PassosFeitos').value = c;
+        document.getElementById('stepsDone').value = c;
         document.getElementById('wall').style.left = null;
         document.getElementById('wall').style.right = '0px';
+        //added this
+        document.getElementById('ai').style.marginTop = "0px";
+        aiPos = 0;
         
     }
 }
 
 function moveWall(){
     var getWallX = document.getElementById('wall').offsetLeft;
+    var getWallY = document.getElementById('wall').offsetTop;
     
-    document.getElementById('debugTextarea').innerHTML += "["+c+"] Posição do WALL: "+getWallX+"\n";
+    document.getElementById('debugTextarea').innerHTML += "["+c+"] Wall Pos X: "+getWallX+" | Y:"+getWallY+"\n";
     document.getElementById('debugTextarea').scrollTop = document.getElementById('debugTextarea').scrollHeight;
     
     if(getWallX <= 0){
@@ -43,6 +47,46 @@ function moveWall(){
     }
     
 }
+
+
+function moveCar(direction){
+    if(aiPos < 0){
+        aiPos = 0;
+    }
+    if(aiPos > 250){
+        aiPos = 250;
+    }
+    
+    if(direction == 'down'){
+        aiPos = aiPos + 10;   
+    }else{
+        aiPos = aiPos - 10;
+    }
+    
+    
+    document.getElementById('ai').style.marginTop = aiPos+"px";
+}
+
+
+function checkCollision(){
+    var getWallX = document.getElementById('wall').offsetLeft;
+    var getAIX = document.getElementById('sensor_2').offsetLeft+500;
+    
+    var getWallY = document.getElementById('wall').offsetTop+100;
+    var getAIY = document.getElementById('ai').offsetTop;
+    
+    document.getElementById('debugTextarea').innerHTML += "["+c+"] Sensor2 X: "+getAIX+"| Y:"+getAIY+"\n";
+    
+    if(getWallX < getAIX && getAIY < getWallY){
+        moveCar('down');
+    }
+    
+}
+
+
+
+
+
 
 
 
